@@ -263,7 +263,6 @@ button:hover {
     
     document.body.appendChild(quoteDiv);
     
-    // Spawn fireworks around it
     for (let i = 0; i < 8; i++) {
         setTimeout(() => {
             const x = window.innerWidth / 2 + (Math.random() - 0.5) * 400;
@@ -272,13 +271,11 @@ button:hover {
         }, i * 100);
     }
     
-    // Auto-remove after 5 seconds
     setTimeout(() => {
         quoteDiv.classList.add('exit');
         setTimeout(() => quoteDiv.remove(), 500);
     }, 5000);
     
-    // Click to dismiss
     quoteDiv.onclick = function() {
         quoteDiv.classList.add('exit');
         setTimeout(() => quoteDiv.remove(), 500);
@@ -287,7 +284,7 @@ button:hover {
         let currentPokemon = null;
         let losses = 0
 async function getRandomPokemon() {
-    const randomId = Math.floor(Math.random() * 150) + 1;
+    const randomId = Math.floor(Math.random() * 900) + 1;
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
     const data = await response.json();
     
