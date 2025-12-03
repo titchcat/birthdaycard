@@ -3,599 +3,757 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>happy barnaday</title>
+    <title>happy birthday fam</title>
     <style>
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    overflow: hidden;
-    background: #2a2a4a;
-    color: white;
-    cursor: crosshair;
-}
-
-#canvas, #gridCanvas {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .balloon {
+            position: absolute;
+            font-size: 50px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            z-index: 5;
+            user-select: none;
+        }
+        .pop-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 1px;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 50;
+        }
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+        }
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+.photo-fullscreen {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
-    pointer-events: none;
-}
-
-#canvas {
-    z-index: 1;
-}
-
-#gridCanvas {
-    z-index: 0;
-}
-
-.kanye-quote {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
-    padding: 40px;
-    z-index: 102;
-    display: none;
-    text-align: center;
-    max-width: 500px;
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px black;
-    animation: kanye-enter 0.5s forwards;
-}
-
-@keyframes kanye-enter {
-    to {
-        transform: translate(-50%, -50%) scale(1) rotate(5deg);
-    }
-}
-
-.kanye-quote.exit {
-    animation: kanye-exit 0.5s forwards;
-}
-
-@keyframes kanye-exit {
-    to {
-        transform: translate(-50%, -50%) scale(0) rotate(-360deg);
-        opacity: 0;
-    }
-}
-.content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 200;
     justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    pointer-events: none;
+    align-items: center;
+    flex-direction: column;
 }
-
-.content * {
-    pointer-events: auto;
+.photo-fullscreen img {
+    max-width: 90%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 1px;
 }
-
-h1 {
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.message {
-    font-size: 1.2rem;
-    text-align: center;
-    max-width: 600px;
-    margin: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.balloon {
-    position: fixed;
-    bottom: -100px;
-    font-size: 3rem;
-    z-index: 3;
-    cursor: pointer;
-}
-
-.score {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-size: 1.5rem;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px 20px;
-}
-
-.battle-stats {
-    position: fixed;
-    top: 70px;
-    left: 20px;
-    font-size: 1.2rem;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px 20px;
-}
-
-button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background: #5588ff;
-    border: none;
+.photo-message {
     color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #6699ff;
-}
-
-.firework {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    z-index: 4;
-    pointer-events: none;
-}
-
-.instructions {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
-    z-index: 10;
-}
-
-.snake-game {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.9);
-    padding: 20px;
-    z-index: 100;
-    display: none;
-}
-
-.snake-score {
-    color: white;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1.2rem;
-}
-
-.pokemon-display {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.9);
-    padding: 30px;
-    z-index: 101;
-    display: none;
-    text-align: center;
-    min-width: 300px;
-}
-
-.pokemon-image {
-    width: 150px;
-    height: 150px;
-    margin: 10px auto;
-}
-
-.battle-result {
+    font-size: 1.2em;
     margin-top: 20px;
-    font-size: 1.2rem;
-    color: #ff6b6b;
+    max-width: 600px;
+    text-align: center;
+    padding: 0 20px;
 }
 
-.close-btn {
-    background: #ff4444;
+.photo-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
 }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .photo-item {
+            background: #ddd;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 1px;
+        }
+        .game-area {
+            margin-top: 20px;
+        }
+        #lawn-canvas {
+            border: 2px solid #333;
+            display: block;
+            margin: 20px auto;
+        }
+        .score {
+            font-size: 1.5em;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 1px;
+        }
+        .submit-btn {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    <canvas id="gridCanvas"></canvas>
-    
-    <div class="score">balloons popped: <span id="score">0</span></div><br>
-    <div class="battle-stats">
-    battle wins: <span>0</span> | losses: <span id="losses">0</span>
-</div>
+    <div class="pop-counter">🎈 popped: <span id="popCount">0</span></div>
+    <div class="stars" id="stars"></div>
 
-    <div class="content">
-        <h1 style="width:5000px"><marquee id="marquee" scrollamount="50">happy birthday boss. draw something cool</marquee></h1>
-        <div class="message">
-            <p>have a great day old man</p>
+    <div class="container">
+        <h1>happy birthday dad!!!!! 🎉</h1>
+        <div class="buttons">
+            <button onclick="openBibleGame()">are you a REAL or FAKE bible fan??</button>
+            <button onclick="openPhotos()">family photo time</button>
+            <button onclick="openLawnmower()">mow the lawn as fast as you can!!</button>
+            <button onclick="openPrison()">escape from peruvian prison!!!</button>
         </div>
-        <button onclick="spawnFireworks()">fireworks</button>
-        <button onclick="getKanyeQuote()">kanye wisdom</button>
-        <button onclick="changeColors()">this doesnt do anything but you shouldn't press Q</button>
-        <button onclick="getRandomPokemon()">random pokemon</button>
-        <button onclick="clearDrawings()">clear drawings</button>
-
+    </div>
+    <div id="bibleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bibleModal')">&times;</span>
+            <h2>Bible Verse Game</h2>
+            <p>if you want to use this in church staff interviews i'll offer a family discount for a full version</p>
+            <div class="score">Score: <span id="bibleScore">0</span></div>
+            <div class="game-area">
+                <p id="verseText" style="font-style: italic; margin: 20px 0;"></p>
+                <div>
+                    <input type="text" id="bookGuess" placeholder="Book (e.g., John)">
+                    <input type="number" id="chapterGuess" placeholder="Chapter">
+                    <input type="number" id="verseGuess" placeholder="Verse">
+                </div>
+                <button class="submit-btn" onclick="checkBibleAnswer()">Submit</button>
+                <button class="submit-btn" onclick="newBibleVerse()">New Verse</button>
+                <p id="bibleResult" style="margin-top: 15px;"></p>
+            </div>
         </div>
-    
-
-<div class="pokemon-display" id="pokemonDisplay">
-    <button class="close-btn" onclick="closePokemon()">X</button>
-    <div id="pokemonContent"></div>
-    <button onclick="battleRandom()" id="battleBtn" style="display:none;">battle random</button>
+    </div>
+    <div id="photosModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('photosModal')">&times;</span>
+            <h2>photos of you and the fam (click them!)</h2>
+            <div class="photo-grid" id="photoGrid">
+                <div style="font-size: 0.9em;">${photo.location}</div><div style="font-size: 0.8em; color: #888;">${photo.date}</div>
+            </div>
+        </div>
+    </div>
+    <div id="lawnModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('lawnModal')">&times;</span>
+            <h2>lawnmower sim</h2><br><p>if you ever need to scratch the itch but the lawn is already mown or maybe it's raining</p>
+            <div class="score">Mowed: <span id="mowedPercent">0</span>% | Time: <span id="mowTime">0</span>s</div>
+            <canvas id="lawn-canvas" width="400" height="400"></canvas>
+            <button class="submit-btn" onclick="startLawnGame()">Start/Restart</button>
+            <p style="margin-top: 10px;">Use WASD to move</p>
+        </div>
+    </div>
+    <div id="prisonModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('prisonModal')">&times;</span>
+            <h2>Escape from Peruvian Prison</h2>
+            <div class="game-area">
+                <p style="font-style: italic; margin: 20px 0;">if you ever want to relive the glory days</p>
+                <br><p>guards are red, inmates are orange, walls are grey. get to the green exit! sorry if you've lost colour vision in your old age</p>
+                <div id="prisonGame" style="min-height: 300px; border: 2px dashed #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">
+                    
+                </div>
+                <button class="submit-btn" onclick="startPrisonGame()">Start Game</button>
+            </div>
+        </div>
+    </div>
+<div id="photoFullscreen" class="photo-fullscreen" onclick="closeFullscreenPhoto()">
+    <span class="photo-close-btn">&times;</span>
+    <img id="fullscreenImg" src="" alt="">
+    <div class="photo-message" id="photoMessage"></div>
 </div>
-    </div>
-
-    <div class="instructions">
-        DRAW ANYWHERE
-    </div>
-
-    <div class="snake-game" id="snakeGame">
-        couldve sworn i said not to press that. foolish curiosity is your harmartia
-        <button class="close-btn" onclick="closeSnake()">X</button>
-        <canvas class="snake-canvas" id="snakeCanvas" width="400" height="400"></canvas>
-        <div class="snake-score">Score: <span id="snakeScore">0</span> | WASD to move</div>
-    
-
     <script>
-        async function getKanyeQuote() {
-    const response = await fetch('https://api.kanye.rest');
-    const data = await response.json();
-    
-    const quoteDiv = document.createElement('div');
-    quoteDiv.className = 'kanye-quote';
-    quoteDiv.innerHTML = `
-        <div>"${data.quote}"</div>
-        <div style="font-size: 1rem; margin-top: 20px;">- Kanye West</div>
-    `;
-    quoteDiv.style.display = 'block';
-    
-    document.body.appendChild(quoteDiv);
-    
-    for (let i = 0; i < 8; i++) {
-        setTimeout(() => {
-            const x = window.innerWidth / 2 + (Math.random() - 0.5) * 400;
-            const y = window.innerHeight / 2 + (Math.random() - 0.5) * 400;
-            createExplosion(x, y);
-        }, i * 100);
-    }
-    
-    setTimeout(() => {
-        quoteDiv.classList.add('exit');
-        setTimeout(() => quoteDiv.remove(), 500);
-    }, 5000);
-    
-    quoteDiv.onclick = function() {
-        quoteDiv.classList.add('exit');
-        setTimeout(() => quoteDiv.remove(), 500);
-    };
-}
-        let currentPokemon = null;
-        let losses = 0
-async function getRandomPokemon() {
-    const randomId = Math.floor(Math.random() * 900) + 1;
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-    const data = await response.json();
-    
-    currentPokemon = {
-        name: data.name,
-        sprite: data.sprites.front_default,
-        attack: data.stats[1].base_stat
-    };
-    
-    document.getElementById('pokemonContent').innerHTML = `
-        <h2>${currentPokemon.name.toUpperCase()}</h2>
-        <img src="${currentPokemon.sprite}" class="pokemon-image">
-        <p>Attack: ${currentPokemon.attack}</p>
-    `;
-    
-    document.getElementById('pokemonDisplay').style.display = 'block';
-    document.getElementById('battleBtn').style.display = 'inline-block';
-}
-
-async function battleRandom() {
-    if (!currentPokemon) return;
-    document.getElementById('pokemonContent').innerHTML = `
-        <h2>YOU: ${currentPokemon.name.toUpperCase()}</h2>
-        <img src="${currentPokemon.sprite}" class="pokemon-image">
-        <p>Attack: ${currentPokemon.attack}</p>
-        
-        <h2 style="margin-top: 20px;">MATCHMAKING..........`;
-
-    const minAttack = currentPokemon.attack + 5;
-    let enemyPokemon = null;
-    
-    while (!enemyPokemon || enemyPokemon.attack <= currentPokemon.attack) {
-        const randomId = Math.floor(Math.random() * 900) + 1;
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-        const data = await response.json();
-        
-        enemyPokemon = {
-            name: data.name,
-            sprite: data.sprites.front_default,
-            attack: data.stats[1].base_stat
-        };
-    }
-    losses++
-    document.getElementById('losses').innerHTML = losses;
-    document.getElementById('pokemonContent').innerHTML = `
-        <h2>YOU: ${currentPokemon.name.toUpperCase()}</h2>
-        <img src="${currentPokemon.sprite}" class="pokemon-image">
-        <p>Attack: ${currentPokemon.attack}</p>
-        
-        <h2 style="margin-top: 20px;">OPPONENT: ${enemyPokemon.name.toUpperCase()}</h2>
-        <img src="${enemyPokemon.sprite}" class="pokemon-image">
-        <p>Attack: ${enemyPokemon.attack}</p>
-        
-        <div class="battle-result">MY ATTACK IS HIGHER, I WIN!</div>
-    `;
-}
-
-function closePokemon() {
-    document.getElementById('pokemonDisplay').style.display = 'none';
-    document.getElementById('battleBtn').style.display = 'none';
-    currentPokemon = null;
-}
-
-
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const gridCanvas = document.getElementById('gridCanvas');
-const gridCtx = gridCanvas.getContext('2d');
-gridCanvas.width = window.innerWidth;
-gridCanvas.height = window.innerHeight;
-
-let score = 0;
-let hue = 0;
-let gridOffset = 0;
-
-function animate() {
-    gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-    
-    gridCtx.strokeStyle = `hsla(${hue}, 50%, 40%, 0.3)`;
-    gridCtx.lineWidth = 1;
-    
-    for (let x = gridOffset; x < gridCanvas.width; x += 50) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(x, 0);
-        gridCtx.lineTo(x, gridCanvas.height);
-        gridCtx.stroke();
-    }
-    
-    for (let y = gridOffset; y < gridCanvas.height; y += 50) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(0, y);
-        gridCtx.lineTo(gridCanvas.width, y);
-        gridCtx.stroke();
-    }
-    
-    gridOffset = (gridOffset + 0.8) % 50;
-    hue += 0.2;
-    requestAnimationFrame(animate);
-}
-
-ctx.fillStyle = 'rgba(42, 42, 74, 0)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-animate();
-        function clearDrawings() {
-    ctx.fillStyle = '#2a2a4a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-        function spawnBalloon() {
-            const balloon = document.createElement('div');
-            balloon.className = 'balloon';
-            balloon.textContent = ['🎈', 'balloon', '🎈', '🎉'][Math.floor(Math.random() * 4)];
-            balloon.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-            
-            let bottom = -100;
-            balloon.style.bottom = bottom + 'px';
-            
-            balloon.onclick = function(e) {
-                score++;
-                document.getElementById('score').textContent = score;
-                createExplosion(e.clientX, e.clientY);
-                balloon.remove();
-            };
-
-            document.body.appendChild(balloon);
-
-            let moveInterval = setInterval(() => {
-                bottom += 2;
-                balloon.style.bottom = bottom + 'px';
-                
-                if (bottom > window.innerHeight + 100) {
-                    clearInterval(moveInterval);
-                    balloon.remove();
-                }
-            }, 20);
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
         }
-
-        setInterval(spawnBalloon, 1800);
-
-        function createExplosion(x, y) {
-            for (let i = 0; i < 15; i++) {
+        function createFirework() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 20; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'firework';
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
-                particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                
-                const angle = (Math.PI * 2 * i) / 15;
-                const velocity = 80;
-                const vx = Math.cos(angle) * velocity;
-                const vy = Math.sin(angle) * velocity;
-
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 document.body.appendChild(particle);
-
-                let time = 0;
-                const animate = setInterval(() => {
-                    time += 0.02;
-                    const newX = x + vx * time;
-                    const newY = y + vy * time + 0.5 * 180 * time * time;
+                
+                const angle = (Math.PI * 2 * i) / 20;
+                const velocity = 2 + Math.random() * 2;
+                let vx = Math.cos(angle) * velocity;
+                let vy = Math.sin(angle) * velocity;
+                
+                let posX = x, posY = y;
+                let opacity = 1;
+                
+                const animate = () => {
+                    posX += vx;
+                    posY += vy;
+                    vy += 0.1;
+                    opacity -= 0.02;
                     
-                    particle.style.left = newX + 'px';
-                    particle.style.top = newY + 'px';
-                    particle.style.opacity = 1 - time / 0.7;
-
-                    if (time > 0.7) {
-                        clearInterval(animate);
+                    particle.style.left = posX + 'px';
+                    particle.style.top = posY + 'px';
+                    particle.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
                         particle.remove();
                     }
-                }, 16);
+                };
+                animate();
             }
         }
 
-        let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
+        setInterval(createFirework, 2000);
 
-document.addEventListener('mousedown', function(e) {
-    isDrawing = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-});
+        // Balloons
+        let popCount = 0;
 
-document.addEventListener('mouseup', function() {
-    isDrawing = false;
-});
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.textContent = ['🎈', 'balloon', '🥳', '🎉'][Math.floor(Math.random() * 4) + 1];
+            
+            balloon.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            balloon.style.bottom = '-70px';
+            
+            document.body.appendChild(balloon);
+            
+            const duration = 8000 + Math.random() * 4000;
+            const startTime = Date.now();
+            
+            balloon.addEventListener('click', () => {
+                popCount++;
+                document.getElementById('popCount').textContent = popCount;
+                balloon.remove();
+            });
+            
+            const animate = () => {
+                const elapsed = Date.now() - startTime;
+                const progress = elapsed / duration;
+                
+                if (progress < 1 && balloon.parentElement) {
+                    const currentBottom = progress * (window.innerHeight + 70);
+                    balloon.style.bottom = currentBottom + 'px';
+                    requestAnimationFrame(animate);
+                } else {
+                    balloon.remove();
+                }
+            };
+            
+            animate();
+        }
 
-document.addEventListener('mousemove', function(e) {
-    if (!isDrawing) return;
-    
-    ctx.strokeStyle = `hsl(${hue}, 100%, 60%)`;
-    ctx.lineWidth = 20;
-    ctx.lineCap = 'round';
-    
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(e.clientX, e.clientY);
-    ctx.stroke();
-    
-    lastX = e.clientX;
-    lastY = e.clientY;
-});
+        setInterval(createBalloon, 500);
+        function openBibleGame() {
+            document.getElementById('bibleModal').style.display = 'flex';
+            newBibleVerse();
+        }
 
-        function spawnFireworks() {
-            for (let i = 0; i < 4; i++) {
-                setTimeout(() => {
-                    const x = Math.random() * window.innerWidth;
-                    const y = Math.random() * window.innerHeight * 0.5;
-                    createExplosion(x, y);
-                }, i * 400);
+        function openPhotos() {
+            document.getElementById('photosModal').style.display = 'flex';
+            loadPhotos();
+        }
+
+        function openLawnmower() {
+            document.getElementById('lawnModal').style.display = 'flex';
+        }
+        function openPrison() {
+            document.getElementById('prisonModal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        let currentVerse = null;
+        let bibleScore = 0;
+
+        async function newBibleVerse() {
+            document.getElementById('verseText').textContent = 'Loading...';
+            document.getElementById('bibleResult').textContent = '';
+            document.getElementById('bookGuess').value = '';
+            document.getElementById('chapterGuess').value = '';
+            document.getElementById('verseGuess').value = '';
+
+            try {
+                const response = await fetch('https://bible-api.com/?random=verse&translation=web');
+                const data = await response.json();
+                const reference = data.reference;
+                const parts = reference.match(/^(\d?\s?[A-Za-z]+)\s(\d+):(\d+)/);
+                
+                if (parts) {
+                    currentVerse = {
+                        text: data.text.trim(),
+                        book: parts[1].trim(),
+                        chapter: parseInt(parts[2]),
+                        verse: parseInt(parts[3])
+                    };
+                    
+                    document.getElementById('verseText').textContent = `"${currentVerse.text}"`;
+                } else {
+                    throw new Error('Could not parse verse reference');
+                }
+            } catch (error) {
+                document.getElementById('verseText').textContent = 'Error loading verse. Please try again.';
+                console.error('Error fetching verse:', error);
             }
         }
 
-
-        window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    gridCanvas.width = window.innerWidth;
-    gridCanvas.height = window.innerHeight;
-});
-        function revealSecret() {
-            document.getElementById('snakeGame').style.display = 'block';
-            initSnake();
-        }
-        function closeSnake() {
-            document.getElementById('snakeGame').style.display = 'none';
-        }
-        let snakeCanvas, snakeCtx, snake, food, snakeDx, snakeDy, snakeScore, gameLoop;
-        // long let declarations make me feel like god creating all the different animals
-        // like
-        /*
-        let tortoise, hare, elephant, blobfish, snake, cat, lynx;
-        */
-        
-        function initSnake() {
-            snakeCanvas = document.getElementById('snakeCanvas');
-            snakeCtx = snakeCanvas.getContext('2d');
-            snake = [{x: 200, y: 200}];
-            food = {x: 0, y: 0};
-            snakeDx = 0;
-            snakeDy = 0;
-            snakeScore = 0;
+        function checkBibleAnswer() {
+            if (!currentVerse) return;
             
-            spawnFood();
+            const bookGuess = document.getElementById('bookGuess').value.trim();
+            const chapterGuess = parseInt(document.getElementById('chapterGuess').value);
+            const verseGuess = parseInt(document.getElementById('verseGuess').value);
             
-            if (gameLoop) clearInterval(gameLoop);
-            gameLoop = setInterval(updateSnake, 100);
-        }
-
-        function spawnFood() {
-            food.x = Math.floor(Math.random() * 20) * 20;
-            food.y = Math.floor(Math.random() * 20) * 20;
-        }
-
-        function updateSnake() {
-            if (snakeDx === 0 && snakeDy === 0) return;
+            let points = 0;
+            let result = [];
             
-            const head = {x: snake[0].x + snakeDx, y: snake[0].y + snakeDy};
-        
-            if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400) {
-                alert('lol u suck. you got: ' + snakeScore + '. i literally managed to get '+ (snakeScore+3) + ' first try in testing.');
-                initSnake();
-                return;
+            if (bookGuess.toLowerCase() === currentVerse.book.toLowerCase()) {
+                points += 1;
+                result.push('Book: ✓');
+            } else {
+                result.push(`Book: ✗ (${currentVerse.book})`);
             }
             
-            // this bit of code does NOT work that well but i cant be bothered to figure out why. sometimes you just lose and that's life
-            for (let segment of snake) {
-                if (head.x === segment.x && head.y === segment.y) {
-                    alert('lol u suck. you got: ' + snakeScore + '. i literally managed to get '+ (snakeScore+3) + ' first try in testing. that function that made the game end just now also doesnt super work all the time so my bad if you lost unfairly. really makes you think huh');
-                    initSnake();
-                    return;
+            if (chapterGuess === currentVerse.chapter) {
+                points += 1;
+                result.push('Chapter: ✓');
+            } else {
+                result.push(`Chapter: ✗ (${currentVerse.chapter})`);
+            }
+            
+            if (Math.abs(verseGuess - currentVerse.verse) <= 5) {
+                if (verseGuess === currentVerse.verse) {
+                    points += 4;
+                    result.push('Verse: ✓✓ Exact!');
+                } else {
+                    points += 1;
+                    result.push(`Verse: ~ Within 5 (${currentVerse.verse})`);
+                }
+            } else {
+                result.push(`Verse: ✗ (${currentVerse.verse})`);
+            }
+            
+            bibleScore += points;
+            document.getElementById('bibleScore').textContent = bibleScore;
+            document.getElementById('bibleResult').innerHTML = result.join('<br>') + `<br><strong>+${points} points!</strong>`;
+        }
+
+        const photos = [
+    { url: "https://media.discordapp.net/attachments/1129827456111607861/1445891125511454881/IMG-20251203-WA0000.jpg?ex=6931fe8b&is=6930ad0b&hm=9731224017243e0d4a4ec3d7cf5deb0bc93e961e4cf19ce2a524b6e4007791a2&=&format=webp&width=1275&height=718", location: "Wimbledon", date: "July 2017", message: "Swindling our way onto centre court was a critical moment in my education, thank you for teaching me how to make the best of opportunities."},
+    { url: "https://media.discordapp.net/attachments/1129827456111607861/1445891126086340669/IMG-20251203-WA0001.jpg?ex=6931fe8b&is=6930ad0b&hm=5fcf2f6bd8d76984f6836bee5f8216a1ef96d14c03bf3ef2751416269ba01b6e&=&format=webp&width=538&height=718", location: "KES", date: "November 2022", message: 'Thanks for coming to see all 15 minutes of my stage time, even after I lost my actual role!'},
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891126639722609/IMG-20251203-WA0003.jpg?ex=6931fe8b&is=6930ad0b&hm=4602ce454807781a6fde4d62bae70bb8e8b50888c8f6ce7ce1f28cdc4fbecf56&", location: "Australia", date: "April 2011", message: "I don't really remember this but I do remember this awesome jumper" },
+    { url: "https://media.discordapp.net/attachments/1129827456111607861/1445891127030055116/IMG-20251203-WA0004.jpg?ex=6931fe8c&is=6930ad0c&hm=7610c429b0a8bc91789a345679f504568a204c5f65c66baaef115836472508f4&=&format=webp&width=538&height=718", location: "Cambridge", date: "August 2016", message: 'I MIGHT be the greatest punting prodigy there ever was, thanks for showing me the ropes' },
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891127491301517/IMG-20251203-WA0005.jpg?ex=6931fe8c&is=6930ad0c&hm=aec865283d47f61784b81fb3f31a72061354ec55531e696479a1bc3b994cce2b&", location: "New York", date: "July 2018", message: 'Charis: "Thanks for experiencing nyc with me!'},
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891128204460162/IMG-20251203-WA0009.jpg?ex=6931fe8c&is=6930ad0c&hm=b510894233ae32cc86bd0c66fd801ee9906305bb5b7c4bbcde035d491c7dad29&", location: "Australia", date: "December 2020", message: "Toby: 'Nearly dying rock climbing right before the wedding was worth it to spend time on a beautiful walk with you" },
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891128695062558/IMG-20251203-WA0010.jpg?ex=6931fe8c&is=6930ad0c&hm=5419cd35288d125fd7bccbafeac11218b000b13e3c076a32b82f59ca14d41cea&", location: "Home", date: "March 2021", message: 'As much as I hate to admit it, you were his favourite for some inexplicable reason' },
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891129168887994/IMG-20251203-WA0011.jpg?ex=6931fe8c&is=6930ad0c&hm=c57ddbea2414e2a70aec8293aa1b26f8c3cfb906dbeec25ca201625bcd3c3802&", location: "Harbour Hotel", date: "March 2022", message: "I don't remember being here if I was, but you both look very swag" },
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445891129911283850/IMG-20251203-WA0013.jpg?ex=6931fe8c&is=6930ad0c&hm=a57cd68194c0a5447f7adff12265b80bc3d44cc17029e5d8de33f5705d94a7c8&", location: "The Mendips", date: "April 2024", message: "A very muddy walk that was absolutely worth it despite our misgiginvgs, Barnaby: 'As usual, going on this walk with you was more fun than I expected.'" },
+    { url: "https://cdn.discordapp.com/attachments/1129827456111607861/1445898629784277103/c1d14942-02ff-43ea-a1eb-35213ab1f665.png?ex=69320588&is=6930b408&hm=1fb9f66a6f5ff10697d61e499b91b85e3dee48464b68a35412522b5c71813a82", location: "America", date: "July 2018", message: 'Quite a scary hotel drive with an awesome swimming pool that I remember swimming in way past my bedtime' }
+];
+
+       function loadPhotos() {
+    const grid = document.getElementById('photoGrid');
+    grid.innerHTML = '';
+    photos.forEach((photo, index) => {
+        const item = document.createElement('div');
+        item.className = 'photo-item';
+        item.style.background = 'none';
+        item.style.padding = '0';
+        item.style.cursor = 'pointer';
+        item.innerHTML = `
+            <img src="${photo.url}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;" alt="${photo.location}">
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 0.9em;">${photo.location}<br><span style="font-size: 0.8em;">${photo.date}</span></div>
+        `;
+        item.style.position = 'relative';
+        item.onclick = () => openFullscreenPhoto(index);
+        grid.appendChild(item);
+    });
+}
+
+function openFullscreenPhoto(index) {
+    const photo = photos[index];
+    document.getElementById('fullscreenImg').src = photo.url;
+    document.getElementById('photoMessage').textContent = photo.message;
+    document.getElementById('photoFullscreen').style.display = 'flex';
+}
+
+function closeFullscreenPhoto() {
+    document.getElementById('photoFullscreen').style.display = 'none';
+}
+
+        const canvas = document.getElementById('lawn-canvas');
+        const ctx = canvas.getContext('2d');
+        let mowerX = 200, mowerY = 200
+        let mowerSize = 20;
+        let lawnGrid = [];
+        let gridSize = 40;
+        let cols = canvas.width / gridSize;
+        let rows = canvas.height / gridSize;
+        let gameActive = false;
+        let startTime = 0;
+        let gameInterval = null;
+
+        const keys = {};
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function startLawnGame() {
+            lawnGrid = [];
+            for (let i = 0; i < rows; i++) {
+                lawnGrid[i] = [];
+                for (let j = 0; j < cols; j++) {
+                    lawnGrid[i][j] = false;
                 }
             }
-            
-            snake.unshift(head);
+            mowerX = canvas.width / 2;
+            mowerY = canvas.height / 2;
+            gameActive = true;
+            startTime = Date.now();
 
-            if (head.x === food.x && head.y === food.y) {
-                snakeScore++;
-                document.getElementById('snakeScore').textContent = snakeScore;
-                spawnFood();
-            } else {
-                snake.pop();
-            }
-            
-            drawSnake();
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(updateLawnGame, 1000 / 30);
         }
 
-        function drawSnake() {
-            snakeCtx.fillStyle = '#1a1a2e';
-            snakeCtx.fillRect(0, 0, 400, 400);
-            snakeCtx.fillStyle = '#4CAF50';
-            for (let segment of snake) {
-                snakeCtx.fillRect(segment.x, segment.y, 20, 20);
+        function updateLawnGame() {
+            if (!gameActive) return;
+
+            const speed = 3;
+            if (keys['w']) mowerY -= speed;
+            if (keys['s']) mowerY += speed;
+            if (keys['a']) mowerX -= speed;
+            if (keys['d']) mowerX += speed;
+
+            mowerX = Math.max(mowerSize/2, Math.min(canvas.width - mowerSize/2, mowerX));
+            mowerY = Math.max(mowerSize/2, Math.min(canvas.height - mowerSize/2, mowerY));
+
+            const gridX = Math.floor(mowerX / gridSize);
+            const gridY = Math.floor(mowerY / gridSize);
+            if (gridX >= 0 && gridX < cols && gridY >= 0 && gridY < rows) {
+                lawnGrid[gridY][gridX] = true;
             }
-            snakeCtx.fillStyle = '#ff6b6b';
-            snakeCtx.fillRect(food.x, food.y, 20, 20);
+            ctx.fillStyle = '#2d5016';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    if (lawnGrid[i][j]) {
+                        ctx.fillStyle = '#4a7c2c';
+                        ctx.fillRect(j * gridSize, i * gridSize, gridSize, gridSize);
+                    }
+                }
+            }
+            ctx.fillStyle = 'red';
+            ctx.fillRect(mowerX - mowerSize/2, mowerY - mowerSize/2, mowerSize, mowerSize);
+            let mowed = 0;
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    if (lawnGrid[i][j]) mowed++;
+                }
+            }
+            const percent = Math.floor((mowed / (rows * cols)) * 100);
+            document.getElementById('mowedPercent').textContent = percent;
+            
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('mowTime').textContent = elapsed;
+
+            if (percent === 100) {
+                gameActive = false;
+                alert(`Lawn complete in ${elapsed} seconds!`);
+            }
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'q' && document.getElementById('snakeGame').style.display !== 'block') {
-                document.getElementById('snakeGame').style.display = 'block';
-                initSnake();
-                return;
-            }
-            if (document.getElementById('snakeGame').style.display !== 'block') return;
-            if (e.key === 'w' && snakeDy === 0) { snakeDx = 0; snakeDy = -20; }
-            if (e.key === 's' && snakeDy === 0) { snakeDx = 0; snakeDy = 20; }
-            if (e.key === 'a' && snakeDx === 0) { snakeDx = -20; snakeDy = 0; }
-            if (e.key === 'd' && snakeDx === 0) { snakeDx = 20; snakeDy = 0; }
+let prisonCanvas, prisonCtx;
+let player = { x: 50, y: 350, size: 15, floor: 0 };
+let guards = [];
+let walls = [];
+let exitDoor = null;
+let prisonGameActive = false;
+let prisonKeys = {};
+
+document.addEventListener('keydown', (e) => {
+    if (prisonGameActive) {
+        prisonKeys[e.key.toLowerCase()] = true;
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (prisonGameActive) {
+        prisonKeys[e.key.toLowerCase()] = false;
+    }
+});
+function startPrisonGame() {
+    const gameArea = document.getElementById('prisonGame');
+    gameArea.innerHTML = '<canvas id="prison-canvas" width="500" height="400" style="border: 2px solid #333; display: block;"></canvas><p style="margin-top: 10px;">Use WASD to move</p>';
+    prisonCanvas = document.getElementById('prison-canvas');
+    prisonCtx = prisonCanvas.getContext('2d');
+    
+    generatePrisonLevel();
+    prisonGameActive = true;
+    prisonGameLoop();
+}
+
+function generatePrisonLevel() {
+    player = { x: 50, y: 350, size: 15, floor: 0 };
+    guards = [];
+    inmates = [];
+    walls = [];
+    
+    for (let i = 0; i < 8; i++) {
+        walls.push({
+            x: Math.random() * 400 + 50,
+            y: Math.random() * 300 + 50,
+            width: Math.random() * 80 + 40,
+            height: 15,
+            horizontal: true
         });
+    }
+    
+    for (let i = 0; i < 5; i++) {
+        walls.push({
+            x: Math.random() * 400 + 50,
+            y: Math.random() * 300 + 50,
+            width: 15,
+            height: Math.random() * 80 + 40,
+            horizontal: false
+        });
+    }
+    
+    for (let i = 0; i < 5; i++) {
+        guards.push({
+            x: Math.random() * 400 + 50,
+            y: Math.random() * 350 + 25,
+            size: 15,
+            speedX: (Math.random() - 0.5) * 2,
+            speedY: (Math.random() - 0.5) * 2,
+            patrolMinX: Math.random() * 200,
+            patrolMaxX: Math.random() * 200 + 300
+        });
+    }
+    exitDoor = {
+        x: prisonCanvas.width - 60,
+        y: 20,
+        width: 40,
+        height: 40
+    };
+}
+
+function checkCollision(obj1, obj2, size1, size2) {
+    return obj1.x < obj2.x + size2 &&
+           obj1.x + size1 > obj2.x &&
+           obj1.y < obj2.y + size2 &&
+           obj1.y + size1 > obj2.y;
+}
+
+function checkWallCollision(newX, newY) {
+    for (let wall of walls) {
+        if (newX < wall.x + wall.width &&
+            newX + player.size > wall.x &&
+            newY < wall.y + wall.height &&
+            newY + player.size > wall.y) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function prisonGameLoop() {
+    if (!prisonGameActive) return;
+    
+    prisonCtx.fillStyle = '#2c2c2c';
+    prisonCtx.fillRect(0, 0, prisonCanvas.width, prisonCanvas.height);
+    
+    const speed = 1;
+    let newX = player.x;
+    let newY = player.y;
+    
+    if (prisonKeys['w']) newY -= speed;
+    if (prisonKeys['s']) newY += speed;
+    if (prisonKeys['a']) newX -= speed;
+    if (prisonKeys['d']) newX += speed;
+    
+    if (!checkWallCollision(newX, newY)) {
+        player.x = Math.max(0, Math.min(prisonCanvas.width - player.size, newX));
+        player.y = Math.max(0, Math.min(prisonCanvas.height - player.size, newY));
+    }
+    
+    prisonCtx.fillStyle = '#555';
+    for (let wall of walls) {
+        prisonCtx.fillRect(wall.x, wall.y, wall.width, wall.height);
+    }
+    
+    prisonCtx.fillStyle = '#ff3333';
+    for (let guard of guards) {
+        guard.x += guard.speedX;
+        guard.y += guard.speedY;
+        
+        if (guard.x < guard.patrolMinX || guard.x > guard.patrolMaxX) {
+            guard.speedX *= -1;
+        }
+        if (guard.y < 0 || guard.y > prisonCanvas.height - guard.size) {
+            guard.speedY *= -1;
+        }
+        
+        prisonCtx.fillRect(guard.x, guard.y, guard.size, guard.size);
+        if (checkCollision(player, guard, player.size, guard.size)) {
+            prisonGameActive = false;
+            alert('Caught by a guard! Try again.');
+            return;
+        }
+    }
+    prisonCtx.fillStyle = '#ff9933';
+    for (let inmate of inmates) {
+        prisonCtx.fillRect(inmate.x, inmate.y, inmate.size, inmate.size);
+        const dist = Math.hypot(player.x - inmate.x, player.y - inmate.y);
+        if (dist < 30) {
+            player.x += (player.x - inmate.x) * 0.01;
+            player.y += (player.y - inmate.y) * 0.01;
+        }
+    }
+    prisonCtx.fillStyle = '#33ff33';
+
+    prisonCtx.fillRect(exitDoor.x, exitDoor.y, exitDoor.width, exitDoor.height);
+    prisonCtx.fillStyle = '#000';
+    prisonCtx.font = '12px Comic Sans MS';
+    prisonCtx.fillText('EXIT', exitDoor.x + 8, exitDoor.y + 25);
+    prisonCtx.fillStyle = '#3388ff';
+    prisonCtx.fillRect(player.x, player.y, player.size, player.size);
+    if (player.x < exitDoor.x + exitDoor.width &&
+        player.x + player.size > exitDoor.x &&
+        player.y < exitDoor.y + exitDoor.height &&
+        player.y + player.size > exitDoor.y) {
+        prisonGameActive = false;
+        alert('🎉 you escaped :)');
+        return;
+    }
+    
+    requestAnimationFrame(prisonGameLoop);
+}
     </script>
 </body>
 </html>
