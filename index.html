@@ -202,6 +202,17 @@
     </style>
 </head>
 <body>
+    <audio id="backgroundMusic" loop>
+    <source src="https://cdn.discordapp.com/attachments/1240413097303343226/1445912051557072926/All_About_That_Bass.mp3?ex=69321208&is=6930c088&hm=3a2b4bc655d3a5ecab3a6ecfb81a508786e3d3f76da493e17de088c53854ceb6&" type="audio/mpeg">
+</audio>
+
+<audio id="buttonSound">
+    <source src="https://cdn.discordapp.com/attachments/1148225551753019403/1445912284898656306/vine-boom_2.mp3?ex=69321240&is=6930c0c0&hm=03a8469d840158d427130a0e0c882f968069e034e818cd8f3bff3bb81585cec3&" type="audio/mpeg">
+</audio>
+
+<audio id="balloonPopSound">
+    <source src="https://cdn.discordapp.com/attachments/1148225551753019403/1445912453299830904/pop_7e9Is8L.mp3?ex=69321268&is=6930c0e8&hm=589dcf3d619b105a518d6c1cfc18e9eecca454afc1dc061b4f2d20f6b15ce630&" type="audio/mpeg">
+</audio>
     <div class="pop-counter">🎈 popped: <span id="popCount">0</span></div>
     <div class="stars" id="stars"></div>
 
@@ -227,8 +238,8 @@
                     <input type="number" id="chapterGuess" placeholder="Chapter">
                     <input type="number" id="verseGuess" placeholder="Verse">
                 </div>
-                <button class="submit-btn" onclick="checkBibleAnswer()">Submit</button>
-                <button class="submit-btn" onclick="newBibleVerse()">New Verse</button>
+                <button class="submit-btn" onclick="playButtonSound(); checkBibleAnswer()">Submit</button>
+                <button class="submit-btn" onclick="playButtonSound(); newBibleVerse()">New Verse</button>
                 <p id="bibleResult" style="margin-top: 15px;"></p>
             </div>
         </div>
@@ -258,7 +269,7 @@
             <h2>Escape from Peruvian Prison</h2>
             <div class="game-area">
                 <p style="font-style: italic; margin: 20px 0;">if you ever want to relive the glory days</p>
-                <br><p>guards are red, inmates are orange, walls are grey. get to the green exit! sorry if you've lost colour vision in your old age</p>
+                <br><p>guards are red, walls are grey. get to the green exit! sorry if you've lost colour vision in your old age</p>
                 <div id="prisonGame" style="min-height: 300px; border: 2px dashed #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">
                     
                 </div>
@@ -272,6 +283,30 @@
     <div class="photo-message" id="photoMessage"></div>
 </div>
     <script>
+        // Audio setup
+const bgMusic = document.getElementById('backgroundMusic');
+const buttonSound = document.getElementById('buttonSound');
+const balloonPopSound = document.getElementById('balloonPopSound');
+
+let musicStarted = false;
+function startMusic() {
+    if (!musicStarted) {
+        bgMusic.play().catch(e => console.log('Audio autoplay prevented'));
+        musicStarted = true;
+    }
+}
+
+document.addEventListener('click', startMusic, { once: true });
+
+function playButtonSound() {
+    buttonSound.currentTime = 0;
+    buttonSound.play().catch(e => console.log('Sound play failed'));
+}
+
+function playBalloonPop() {
+    balloonPopSound.currentTime = 0;
+    balloonPopSound.play().catch(e => console.log('Sound play failed'));
+}
         const starsContainer = document.getElementById('stars');
         for (let i = 0; i < 50; i++) {
             const star = document.createElement('div');
@@ -324,8 +359,6 @@
         }
 
         setInterval(createFirework, 2000);
-
-        // Balloons
         let popCount = 0;
 
         function createBalloon() {
@@ -342,6 +375,7 @@
             const startTime = Date.now();
             
             balloon.addEventListener('click', () => {
+                playBalloonPop();
                 popCount++;
                 document.getElementById('popCount').textContent = popCount;
                 balloon.remove();
@@ -365,19 +399,23 @@
 
         setInterval(createBalloon, 500);
         function openBibleGame() {
+            playButtonSound();
             document.getElementById('bibleModal').style.display = 'flex';
             newBibleVerse();
         }
 
         function openPhotos() {
+            playButtonSound()
             document.getElementById('photosModal').style.display = 'flex';
             loadPhotos();
         }
 
         function openLawnmower() {
+            playButtonSound()
             document.getElementById('lawnModal').style.display = 'flex';
         }
         function openPrison() {
+            playButtonSound()
             document.getElementById('prisonModal').style.display = 'flex';
         }
 
